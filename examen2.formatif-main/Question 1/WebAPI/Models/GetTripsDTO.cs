@@ -7,8 +7,8 @@ namespace WebAPI.Models
 		{
 		}
 
-		public List<Trip> UserTrips { get; set; } = new List<Trip>();
-        public List<Trip> PublicTrips { get; set; } = new List<Trip>();
+		public virtual List<Trip> UserTrips { get; set; } = new List<Trip>();
+        public virtual List<Trip> PublicTrips { get; set; } = new List<Trip>();
     }
 }
 

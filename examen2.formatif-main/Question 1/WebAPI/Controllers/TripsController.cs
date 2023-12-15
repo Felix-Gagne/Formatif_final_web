@@ -39,7 +39,7 @@ namespace WebAPI.Controllers
         // GET: api/Trips
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<GetTripsDTO>> GetTrips()
+        public virtual async Task<ActionResult<GetTripsDTO>> GetTrips()
         {
             var result = new GetTripsDTO();
 
@@ -58,7 +58,7 @@ namespace WebAPI.Controllers
         // POST: api/Trips/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("{id}")]
-        public async Task<IActionResult> ShareTrip(int id, ShareTripDTO shareTripDTO)
+        public virtual async Task<IActionResult> ShareTrip(int id, ShareTripDTO shareTripDTO)
         {
             //TODO le contrôleur a [Authorize], alors il y aura toujours un UserId ici
             try
