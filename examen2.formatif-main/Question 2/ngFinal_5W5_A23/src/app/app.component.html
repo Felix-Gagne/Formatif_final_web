@@ -1,0 +1,34 @@
+<div class="main">
+  <div *ngIf="!isConnected">
+    <button mat-raised-button color="accent" (click)="connect()">Se Connecter</button>
+  </div>
+  <div *ngIf="isConnected">
+    <button mat-raised-button color="accent" (click)="disconnect()" style="margin-bottom: 16px;">Se Déconnecter</button>
+    <div class="couleurFavorite">
+      <h1>Choisissez votre couleur préférée:</h1>
+      <mat-grid-list class="colors" cols="4" rowHeight="3:1">
+        <mat-grid-tile *ngFor="let favoriteColor of favoriteColors; index as i" [class]="i == 0 ? 'noColor' : ''" (click)="chooseColor(i)">
+          <div  [class]="i == selectedIndex ? 'selected' : ''">
+            <mat-card [style.background-color]="favoriteColor.backgroundColor" style="width: 150px;" matBadge={{nbFavoritesPerColor[i]}}>
+              <mat-card-content class="colorContent" >
+                <b>{{favoriteColor.name}}</b>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </div>
+
+
+    <div class="sendMsg">
+      <input type="text" [(ngModel)]="text" placeholder="Message">
+      <button mat-raised-button color="accent" (click)="sendMessage()">Envoyer Message</button>
+    </div>
+
+    <h2>Messages récents des utilisateurs avec la même couleur:</h2>
+    <div *ngFor="let msg of recentMessages">{{msg}}</div>
+  </div>
+</div>
+
+
+

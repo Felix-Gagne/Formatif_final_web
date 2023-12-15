@@ -1,0 +1,48 @@
+.main {
+  margin: 25px;
+}
+
+.colors {
+  margin: 0px;
+  padding: 25px;
+}
+
+.noColor {
+  color: white;
+}
+
+.selected {
+  border: blue;
+  border-width: thick;
+  border-style: dotted;
+  padding: 4px;
+}
+
+.colorContent {
+  justify-content: center;
+  display: flex;
+  padding-bottom: 16px;
+}
+
+.sendMsg {
+  padding-top: 32px;
+  padding-bottom: 16px;
+}
+
+
+input[type=text] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.couleurFavorite{
+  border: black;
+  padding: 4px;
+  border-width: thin;
+  border-style: solid;
+}
