@@ -35,11 +35,24 @@ export class AppComponent {
       .then(() => {
         console.log('La connexion est live!');
         // TODO: Mettre à jour la variable isConnected
-
+        this.isConnected = true;
         // TODO: Enregistrer et gérer les évènements suivants:
         // InitFavorites (mettre nbFavoritesPerColor à jour)
+        this.hubConnection!.on('InitFavorites', (data) =>{
+          this.nbFavoritesPerColor = data;
+        })
         // UpdateFavorites (mettre nbFavoritesPerColor à jour)
+        this.hubConnection!.on('UpdateFavorites', (colorIndex, nbFavorites) =>{
+          this.nbFavoritesPerColor[colorIndex] = nbFavorites;
+        })
         // ReceiveMsg (mettre recentMessages à jour)
+        this.hubConnection!.on('ReceiveMsg', (data) =>{
+          this.recentMessages.push(data);
+        })
+        // Disconnect
+        this.hubConnection!.on('Disconnect', (data) =>{
+          this.nbFavoritesPerColor = data;
+        })
       })
       .catch(err => console.log('Error while starting connection: ' + err))
   }
@@ -47,19 +60,25 @@ export class AppComponent {
   disconnect() {
     // TODO: Se déconnecter du Hub
     // TODO: Mettre isConnected à jour
+    this.hubConnection!.invoke("OnDisconnectedAsync").then(() => {
+      this.hubConnection!.stop().then(() => {
+        this.isConnected = false;
+        this.selectedIndex = 0;
+      });
+    });
   }
 
   chooseColor(colorIndex:number) {
     this.selectedIndex = colorIndex;
     // TODO: Appeler ChooseColor sur le Hub avec la nouvelle couleur
-
+    this.hubConnection!.invoke("ChooseColor", this.selectedIndex);
     // On efface les messages récent en changeant de couleur
     this.recentMessages = [];
   }
 
   sendMessage() {
     // TODO: Appeler SendMessage sur le hub avec notre message qui doit être envoyé aux utilisateurs qui ont choisir la même couleur
-
+    this.hubConnection!.invoke("SendMessage", this.text);
     // On efface le contenu de l'input text
     this.text = "";
   }

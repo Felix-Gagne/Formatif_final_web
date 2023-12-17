@@ -27,10 +27,20 @@ namespace FavoriteColor.Hubs
             await Clients.Caller.SendAsync("InitFavorites", _favoriteColorManager.NbFavoritesPerColor);
 
             // TODO: Utiliser l'event UpdateFavorites pour mettre à jour la quantité pour NO_COLOR sur les clients
-            await Clients.All.SendAsync("UpdateFavorites", ColorChoice.NO_COLOR);
+            await Clients.All.SendAsync("UpdateFavorites", ColorChoice.NO_COLOR ,nbFavorites);
         }
 
-        // TODO: Quand un utilisateur se déconnecte, il faut appeler _favoriteColorManager.RemoveUser et mettre à jour la quantité pour la couleur que l'utilisateur avait sur les clients
+        //TODO: Quand un utilisateur se déconnecte, il faut appeler _favoriteColorManager.RemoveUser et mettre à jour la quantité pour la couleur que l'utilisateur avait sur les clients
+        public async Task OnDisconnectedAsync()
+        {
+            var groupName = _favoriteColorManager.GetGroupName(Context.ConnectionId);
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
+
+            _favoriteColorManager.RemoveUser(Context.ConnectionId);
+
+            await Clients.All.SendAsync("Disconnect", _favoriteColorManager.NbFavoritesPerColor);
+        }
+
 
         public async Task ChooseColor(ColorChoice newColor)
         {
@@ -47,7 +57,7 @@ namespace FavoriteColor.Hubs
             await Clients.All.SendAsync("UpdateFavorites", oldColor, nbOldColor);
 
             // TODO: Utiliser l'event UpdateFavorites pour mettre à jour la quantité pour newColor sur les clients
-            await Clients.All.SendAsync("UpdateFavorites", newColor);
+            await Clients.All.SendAsync("UpdateFavorites", newColor, nbNewColor);
 
             // TODO: Retirer l'utilisateur de son ancien groupe
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, oldGroupName);
